@@ -46,9 +46,6 @@ public class ValidSequenceBinaryTree {
         if (root == null || arr.length == 0) {
             return false;
         }
-        if (arr.length == 1 && (root.left != null || root.right != null)) {
-            return false;
-        }
         return isValid(root, arr, 0);
     }
 
