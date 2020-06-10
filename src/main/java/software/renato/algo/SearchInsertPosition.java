@@ -28,8 +28,9 @@ public class SearchInsertPosition {
         int start = 0;
         int end = nums.length - 1;
 
+        int mid = 0;
         while (start <= end) {
-            int mid = start + ((end - start) / 2);
+            mid = start + ((end - start) / 2);
             int num = nums[mid];
             if (target > num) {
                 start = mid + 1;
@@ -40,7 +41,10 @@ public class SearchInsertPosition {
             }
         }
 
-        return start;
+        if (target > nums[mid]) {
+            return mid + 1;
+        }
+        return mid;
     }
 
 }
