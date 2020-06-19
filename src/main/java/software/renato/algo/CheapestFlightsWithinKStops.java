@@ -46,7 +46,7 @@ public class CheapestFlightsWithinKStops {
             return -1;
         }
 
-        Map<Integer, List<Vertex>> mapIdEdges = buildMapEdges(flights);
+        Map<Integer, List<Edge>> mapVertexEdges = buildMapVertexEdges(flights);
 
         Queue<VertexCost> minHeapTotalCost = new PriorityQueue<>(Comparator.comparingInt(v -> v.totalCost));
         minHeapTotalCost.add(new VertexCost(src, 0, 0));
@@ -59,12 +59,12 @@ public class CheapestFlightsWithinKStops {
             }
 
             if (vCost.totalVertices - 1 < K) {
-                List<Vertex> edges = mapIdEdges.getOrDefault(vCost.vertex, Collections.emptyList());
-                for (Vertex e : edges) {
+                List<Edge> edges = mapVertexEdges.getOrDefault(vCost.vertex, Collections.emptyList());
+                for (Edge edge : edges) {
                     int nextTotalVertices = vCost.totalVertices + 1;
-                    int nextTotalCost = vCost.totalCost + e.cost;
+                    int nextTotalCost = vCost.totalCost + edge.cost;
 
-                    VertexCost nextVertexCost = new VertexCost(e.dst, nextTotalCost, nextTotalVertices);
+                    VertexCost nextVertexCost = new VertexCost(edge.dst, nextTotalCost, nextTotalVertices);
 
                     minHeapTotalCost.add(nextVertexCost);
                 }
@@ -74,26 +74,26 @@ public class CheapestFlightsWithinKStops {
         return -1;
     }
 
-    private Map<Integer, List<Vertex>> buildMapEdges(int[][] flights) {
-        Map<Integer, List<Vertex>> mapEdges = new HashMap<>();
+    private Map<Integer, List<Edge>> buildMapVertexEdges(int[][] flights) {
+        Map<Integer, List<Edge>> mapEdges = new HashMap<>();
         for (int i = 0; i < flights.length; i++) {
             int src = flights[i][0];
             int dst = flights[i][1];
             int cost = flights[i][2];
 
-            List<Vertex> edges = mapEdges.getOrDefault(src, new ArrayList<>());
-            edges.add(new Vertex(src, dst, cost));
+            List<Edge> edges = mapEdges.getOrDefault(src, new ArrayList<>());
+            edges.add(new Edge(src, dst, cost));
             mapEdges.put(src, edges);
         }
         return mapEdges;
     }
 
-    private static class Vertex {
+    private static class Edge {
         int src;
         int dst;
         int cost;
 
-        public Vertex(int src, int dst, int cost) {
+        public Edge(int src, int dst, int cost) {
             this.src = src;
             this.dst = dst;
             this.cost = cost;
