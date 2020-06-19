@@ -46,7 +46,7 @@ public class CheapestFlightsWithinKStops {
             return -1;
         }
 
-        Map<Integer, List<Vertex>> mapIdEdges = buildMapIdVertex(flights);
+        Map<Integer, List<Vertex>> mapIdEdges = buildMapEdges(flights);
 
         Queue<VertexCost> minHeapTotalCost = new PriorityQueue<>(Comparator.comparingInt(v -> v.totalCost));
         minHeapTotalCost.add(new VertexCost(src, 0, 0));
@@ -59,16 +59,14 @@ public class CheapestFlightsWithinKStops {
             }
 
             if (vCost.totalVertices - 1 < K) {
-                List<Vertex> edges = mapIdEdges.get(vCost.vertex);
-                if (edges != null) {
-                    for (Vertex e : edges) {
-                        int nextTotalVertices = vCost.totalVertices + 1;
-                        int nextTotalCost = vCost.totalCost + e.cost;
+                List<Vertex> edges = mapIdEdges.getOrDefault(vCost.vertex, Collections.emptyList());
+                for (Vertex e : edges) {
+                    int nextTotalVertices = vCost.totalVertices + 1;
+                    int nextTotalCost = vCost.totalCost + e.cost;
 
-                        VertexCost nextVertexCost = new VertexCost(e.dst, nextTotalCost, nextTotalVertices);
+                    VertexCost nextVertexCost = new VertexCost(e.dst, nextTotalCost, nextTotalVertices);
 
-                        minHeapTotalCost.add(nextVertexCost);
-                    }
+                    minHeapTotalCost.add(nextVertexCost);
                 }
             }
         }
@@ -76,18 +74,18 @@ public class CheapestFlightsWithinKStops {
         return -1;
     }
 
-    private Map<Integer, List<Vertex>> buildMapIdVertex(int[][] flights) {
-        Map<Integer, List<Vertex>> mapIdVertex = new HashMap<>();
+    private Map<Integer, List<Vertex>> buildMapEdges(int[][] flights) {
+        Map<Integer, List<Vertex>> mapEdges = new HashMap<>();
         for (int i = 0; i < flights.length; i++) {
             int src = flights[i][0];
             int dst = flights[i][1];
             int cost = flights[i][2];
 
-            List<Vertex> edges = mapIdVertex.getOrDefault(src, new ArrayList<>());
+            List<Vertex> edges = mapEdges.getOrDefault(src, new ArrayList<>());
             edges.add(new Vertex(src, dst, cost));
-            mapIdVertex.put(src, edges);
+            mapEdges.put(src, edges);
         }
-        return mapIdVertex;
+        return mapEdges;
     }
 
     private static class Vertex {
