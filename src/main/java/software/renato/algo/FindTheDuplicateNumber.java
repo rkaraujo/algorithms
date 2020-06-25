@@ -21,19 +21,30 @@ You must not modify the array (assume the array is read only).
 You must use only constant, O(1) extra space.
 Your runtime complexity should be less than O(n2).
 There is only one duplicate number in the array, but it could be repeated more than once.
+
+-------------
+NOTE: Solve this like the problem 'Given a linked list, return the node where the cycle begins.'
  */
 public class FindTheDuplicateNumber {
 
     public int findDuplicate(int[] nums) {
-        Arrays.sort(nums);
+        int slow = nums[0];
+        int fast = nums[0];
 
-        for (int i = 1; i < nums.length; i++) {
-            if (nums[i] == nums[i-1]) {
-                return nums[i];
-            }
+        // Find the intersection point of the two runners.
+        do {
+            slow = nums[slow];
+            fast = nums[nums[fast]];
+        } while (slow != fast);
+
+        // Find the "entrance" to the cycle.
+        slow = nums[0];
+        while (slow != fast) {
+            slow = nums[slow];
+            fast = nums[fast];
         }
 
-        return -1;
+        return fast;
     }
 
 }
