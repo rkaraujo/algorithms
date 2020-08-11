@@ -1,4 +1,8 @@
+target/
+
 /src/main/java/software/renato/algo/other/*
 /src/test/java/software/renato/algo/other/*
 
+.idea/
+*.iml
 
