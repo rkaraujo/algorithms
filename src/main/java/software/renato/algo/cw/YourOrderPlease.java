@@ -23,9 +23,9 @@ public class YourOrderPlease {
             return "";
         }
 
-        String[] wordsSplitted = words.split(" ");
+        String[] wordsSplit = words.split(" ");
 
-        return Arrays.stream(wordsSplitted)
+        return Arrays.stream(wordsSplit)
                 .map(YourOrderPlease::buildWordAndPosition)
                 .filter((wp) -> wp.position >= 0)
                 .sorted(Comparator.comparingInt(WordAndPosition::getPosition))
